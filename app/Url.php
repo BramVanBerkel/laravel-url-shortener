@@ -12,4 +12,6 @@ class Url extends Model
      * @var string
      */
     protected $table = 'urls';
+
+    protected $fillable = ['user', 'longUrl', 'shortUrl'];
 }
