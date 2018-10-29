@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+Use Config;
 
 class Url extends Model
 {
@@ -22,10 +23,12 @@ class Url extends Model
      * @return string
      */
     public static function generate(){
-        $range = array_merge(range('a', 'z'), range('A', 'Z'), range('0', '9'));
+        $range = Config::get('constants.url.range');
+        $length = Config::get('constants.url.length');
+        
         do{
             $url = '';
-            for($i = 0; $i < 8; $i++){
+            for($i = 0; $i < $length; $i++){
                 $url = $url . $range[array_rand($range)];
             }
         } while(URL::where('shortUrl', '=', $url)->first());
