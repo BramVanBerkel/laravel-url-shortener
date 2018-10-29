@@ -24,8 +24,7 @@ class UrlController extends Controller
             return redirect()->back()->with('success', 'Short url: ' . $request->getHttpHost() . '/u/' . $url->shortUrl);
         };
 
-        $short = DB::select(DB::raw('select left(uuid(), 8)'));
-        $short = reset($short[0]);
+        $short = Url::generate();
 
         $new = Url::create([
             'user' => (Auth::user()) ? Auth::user()->id : null,
@@ -71,7 +70,7 @@ class UrlController extends Controller
         }
         if($url->delete()){
             //error deleting url
-            return redirect('/')->with('success', 'Url deleted');
+            return redirect('/urls')->with('success', 'Url deleted');
         } else {
             //url deleted, redirect home
             return redirect('/')->with('error', 'Error deleting Url, please try again');
@@ -86,6 +85,7 @@ class UrlController extends Controller
      */
     public function view(Request $request)
     {
+        Url::generate();
         $urls = URL::select('id', 'longUrl', DB::raw('CONCAT("'.env("APP_URL").'/u/", shortUrl) as shortUrl'), 'clicks')->where('user', '=', Auth::user()->id)->get()->toArray();
         return view('pages.urls')->with(compact('urls'));
     }

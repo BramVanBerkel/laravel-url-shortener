@@ -18,7 +18,7 @@ class CreateUrlsTable extends Migration
             $table->integer('user')->nullable()->unsigned();
             $table->foreign('user')->references('id')->on('users')->onDelete('cascade');
             $table->text('longUrl');
-            $table->text('shortUrl');
+            $table->string('shortUrl', 8)->unique();
             $table->integer('clicks')->default(0);
             $table->timestamps();
         });
